@@ -11,7 +11,11 @@ import viteLogo from '/vite.svg'
 export class MyElement extends LitElement {
   static get properties() {
     return {
-     /**
+    /**
+     * Texto header 1
+     */
+    header1Text: { type: String },
+      /**
       * La url de la imangen 1
       */
      image1Url: {type: String}
@@ -20,11 +24,13 @@ export class MyElement extends LitElement {
 
   constructor() {
     super()
+    this.header1Text = "REPASO 08 FEBRERO"
     this.image1Url = "https://media.metrolatam.com/2018/10/23/starwarsepisodeviitheforceawakenswide0640x400-e7625331a6913b4c675ea223a59de6c4-1200x800.jpg"
   }
 
   render() {
     return html`
+      <h1>${this.header1Text}</h1>
       <img src="${this.image1Url}">
     `
   }
