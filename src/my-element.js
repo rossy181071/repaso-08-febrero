@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit'
-import litLogo from './assets/lit.svg'
-import viteLogo from '/vite.svg'
+import { Child1Element } from './child-1-element'
+import { CharacterGetterElement } from './character-getter-element'
+import { CharacterCardElement } from './character-card-Element'
 
 /**
  * An example element.
@@ -11,33 +12,58 @@ import viteLogo from '/vite.svg'
 export class MyElement extends LitElement {
   static get properties() {
     return {
-    /**
-     * Texto header 1
-     */
-    header1Text: { type: String },
       /**
-      * La url de la imangen 1
-      */
-     image1Url: {type: String}
+       * The number of times the button has been clicked
+       */
+      count: { type: Number },
+      /**
+       * An array of characters
+       */
+      characters: { type: Array },
+
     }
   }
 
   constructor() {
     super()
-    this.header1Text = "REPASO 08 FEBRERO"
-    this.image1Url = "https://media.metrolatam.com/2018/10/23/starwarsepisodeviitheforceawakenswide0640x400-e7625331a6913b4c675ea223a59de6c4-1200x800.jpg"
+    this.count = 0
+    this.characters = []
+
+  }
+  myEvent1Handler() {
+    this.count++
+  }
+
+  firstUpdated() {
+    const getter = this.shadowRoot.querySelector("#getter")
+
+    for (let i = 0; i < 100; i++)
+      getter.getNewCharacter()
+  }
+
+
+  newCharacterEventHandler(e) {
+    this.characters = [...this.characters, e.detail]
+
+
   }
 
   render() {
     return html`
-      <h1>${this.header1Text}</h1>
-      <img src="${this.image1Url}">
+    <div class="card">
+      <h1>
+        count is ${this.count}
+      </h1>
+      <child-1-element @my-event-1= "${this.myEvent1Handler}"></child-1-element>
+      <character-getter-element id="getter" @new-character-event="${this.newCharacterEventHandler}"></character-getter-element>
+    <div class="character-table">
+      ${this.characters.map(character => html`<character-card-element class="character-item" name="${character.name}" image="${character.image}" species="${character.species}" status="${character.status}"></character-card-element>`)}
+    
+    </div>
+    </div>  
     `
   }
 
-  _onClick() {
-    this.count++
-  }
 
   static get styles() {
     return css`
@@ -110,6 +136,25 @@ export class MyElement extends LitElement {
           background-color: #f9f9f9;
         }
       }
+    img{
+      width: 20vw;
+    }
+
+    .character-table {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      padding-right: 10px;
+      padding-bottom: 10px;
+    
+    }
+
+
+    .character-item {
+      font-size: 30px;
+      text-align: center;
+
+    }
+    
     `
   }
 }
